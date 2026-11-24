@@ -1,0 +1,1196 @@
+/* =====================================================================
+   NOCHE ESTRELLADA · Estilos principales
+   Paleta: azul medianoche profundo, oro champán suave y luz de luna.
+   ===================================================================== */
+
+:root {
+  --bg-profundo: #050814;
+  --bg-noche: #0b1126;
+  --bg-tarjeta: rgba(13, 20, 44, 0.72);
+  --bg-tarjeta-fuerte: rgba(15, 23, 50, 0.86);
+  --borde-estelar: rgba(243, 213, 155, 0.2);
+  --borde-brillo: rgba(243, 213, 155, 0.48);
+
+  --texto-luz: #f6f2e9;
+  --texto-suave: #c7cde3;
+  --texto-tenue: #8d97bc;
+
+  --oro: #f3d59b;
+  --oro-calido: #d6a95d;
+  --rosa-luna: #e8b4c4;
+  --indigo-brillo: #7d8ee8;
+
+  --fuente-titulo: "Cormorant Garamond", Georgia, serif;
+  --fuente-cuerpo: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --fuente-firma: "Dancing Script", cursive;
+
+  --radio-xl: 28px;
+  --radio-lg: 20px;
+  --radio-md: 14px;
+  --sombra-noche: 0 24px 64px rgba(0, 0, 0, 0.55);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 0%, #131d42 0%, var(--bg-noche) 42%, var(--bg-profundo) 100%);
+  color: var(--texto-luz);
+  font-family: var(--fuente-cuerpo);
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.entrada-activa {
+  overflow: hidden;
+}
+
+/* Lienzo del cielo nocturno */
+#cielo-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Bruma sutil de aurora nocturna */
+.aurora-capa {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 18% 18%, rgba(125, 142, 232, 0.14), transparent 70%),
+    radial-gradient(ellipse 50% 35% at 82% 24%, rgba(232, 180, 196, 0.09), transparent 72%),
+    radial-gradient(ellipse 65% 45% at 50% 95%, rgba(243, 213, 155, 0.07), transparent 70%);
+}
+
+.container {
+  width: min(1040px, calc(100% - 2rem));
+  margin-inline: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.eyebrow {
+  margin: 0 0 0.7rem;
+  font-size: 0.76rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--oro);
+  font-weight: 500;
+}
+
+.seccion-titulo {
+  margin: 0;
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2.1rem, 4.8vw, 3.3rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: 0.01em;
+  color: var(--texto-luz);
+}
+
+.seccion-lead {
+  margin: 0.9rem auto 0;
+  max-width: 560px;
+  color: var(--texto-suave);
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.seccion-cabecera {
+  text-align: center;
+  margin-bottom: 2.8rem;
+}
+
+/* =====================================================================
+   Botones estelares
+   ===================================================================== */
+.btn-estelar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  padding: 0.95rem 1.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 213, 155, 0.55);
+  background: linear-gradient(135deg, rgba(243, 213, 155, 0.2), rgba(214, 169, 93, 0.1));
+  color: var(--texto-luz);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 32px rgba(243, 213, 155, 0.16);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.btn-estelar:hover {
+  transform: translateY(-2px);
+  border-color: var(--oro);
+  background: linear-gradient(135deg, rgba(243, 213, 155, 0.3), rgba(214, 169, 93, 0.16));
+  box-shadow: 0 0 42px rgba(243, 213, 155, 0.28);
+}
+
+.btn-estelar:active {
+  transform: translateY(0);
+}
+
+.btn-estelar--suave {
+  padding: 0.85rem 1.65rem;
+  background: rgba(15, 23, 50, 0.65);
+}
+
+.btn-destello {
+  color: var(--oro);
+  font-size: 1rem;
+}
+
+.btn-texto-sutil {
+  background: none;
+  border: 1px solid var(--borde-estelar);
+  color: var(--oro);
+  border-radius: 999px;
+  padding: 0.42rem 0.95rem;
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-texto-sutil:hover {
+  background: rgba(243, 213, 155, 0.1);
+  border-color: var(--borde-brillo);
+}
+
+/* =====================================================================
+   1. Pantalla de entrada
+   ===================================================================== */
+.entrada-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: radial-gradient(circle at 50% 42%, rgba(18, 28, 66, 0.92), rgba(5, 8, 20, 0.98));
+  backdrop-filter: blur(10px);
+  transition: opacity 0.85s ease, visibility 0.85s ease;
+}
+
+.entrada-overlay.oculta {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.entrada-card {
+  width: min(520px, 100%);
+  text-align: center;
+  padding: 3rem 2.2rem;
+  border-radius: var(--radio-xl);
+  background: linear-gradient(180deg, rgba(19, 29, 64, 0.78), rgba(10, 15, 34, 0.88));
+  border: 1px solid var(--borde-estelar);
+  box-shadow: var(--sombra-noche), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  animation: flotarSuave 5s ease-in-out infinite;
+}
+
+.luna-emblema {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 1.4rem;
+  color: var(--oro);
+  filter: drop-shadow(0 0 18px rgba(243, 213, 155, 0.45));
+}
+
+.entrada-titulo {
+  margin: 0 0 1rem;
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2rem, 5vw, 2.85rem);
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--texto-luz);
+}
+
+.entrada-subtitulo {
+  margin: 0 auto 2rem;
+  max-width: 390px;
+  color: var(--texto-suave);
+  font-size: 0.96rem;
+  font-weight: 300;
+}
+
+/* =====================================================================
+   Mini reproductor flotante
+   ===================================================================== */
+.mini-player {
+  position: fixed;
+  top: 1.15rem;
+  right: 1.15rem;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.95rem 0.5rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(10, 16, 36, 0.78);
+  border: 1px solid var(--borde-estelar);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.mini-play-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(243, 213, 155, 0.45);
+  background: rgba(243, 213, 155, 0.14);
+  color: var(--oro);
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s ease;
+}
+
+.mini-play-btn:hover {
+  background: rgba(243, 213, 155, 0.25);
+}
+
+.mini-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.mini-estado {
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--texto-tenue);
+}
+
+.mini-titulo {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--texto-luz);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-onditas {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 14px;
+}
+
+.mini-onditas span {
+  width: 2.5px;
+  height: 5px;
+  border-radius: 2px;
+  background: var(--oro);
+  opacity: 0.5;
+  transition: height 0.2s ease;
+}
+
+.mini-player.reproduciendo .mini-onditas span {
+  opacity: 1;
+  animation: ondaMini 0.9s ease-in-out infinite alternate;
+}
+
+.mini-player.reproduciendo .mini-onditas span:nth-child(2) {
+  animation-delay: 0.22s;
+}
+
+.mini-player.reproduciendo .mini-onditas span:nth-child(3) {
+  animation-delay: 0.45s;
+}
+
+.mini-link {
+  font-size: 0.76rem;
+  color: var(--oro);
+  text-decoration: none;
+  padding-left: 0.45rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.mini-link:hover {
+  text-decoration: underline;
+}
+
+/* =====================================================================
+   Contenido principal + Animaciones de aparición
+   ===================================================================== */
+.contenido-principal {
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.contenido-principal.visible {
+  opacity: 1;
+}
+
+.seccion-revelar {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+
+.seccion-revelar.en-vista {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* =====================================================================
+   2. Portada celestial (Hero)
+   ===================================================================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 6.5rem 0 4rem;
+}
+
+.hero-inner {
+  text-align: center;
+  max-width: 740px;
+}
+
+.luna-halo {
+  width: 92px;
+  height: 92px;
+  margin: 0 auto 2rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff9ea 0%, #f3d59b 46%, rgba(243, 213, 155, 0.15) 75%, transparent 100%);
+  box-shadow:
+    0 0 48px rgba(243, 213, 155, 0.35),
+    0 0 110px rgba(125, 142, 232, 0.22);
+  position: relative;
+}
+
+.luna-halo::after {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1px solid rgba(243, 213, 155, 0.2);
+}
+
+.etiqueta-noche {
+  display: inline-block;
+  padding: 0.42rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--borde-estelar);
+  background: rgba(15, 23, 50, 0.55);
+  color: var(--oro);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.hero-titulo {
+  margin: 0;
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2.8rem, 7vw, 4.9rem);
+  font-weight: 400;
+  line-height: 1.06;
+  color: var(--texto-luz);
+}
+
+.titulo-dorado {
+  display: block;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--oro);
+  text-shadow: 0 0 36px rgba(243, 213, 155, 0.25);
+}
+
+.hero-saludo {
+  margin: 1.25rem 0 0;
+  font-family: var(--fuente-firma);
+  font-size: clamp(1.65rem, 3.6vw, 2.2rem);
+  color: var(--rosa-luna);
+}
+
+.hero-subtitulo {
+  margin: 1.15rem auto 2.2rem;
+  max-width: 540px;
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: var(--texto-suave);
+}
+
+.hero-acciones {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.scroll-indicador {
+  margin-top: 3.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--texto-tenue);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.scroll-linea {
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(to bottom, var(--oro), transparent);
+  animation: pulsoLinea 2.2s ease-in-out infinite;
+}
+
+/* =====================================================================
+   3. Reproductor y Playlist dedicada
+   ===================================================================== */
+.seccion-playlist {
+  padding: 5rem 0;
+}
+
+.reproductor-grid {
+  display: grid;
+  grid-template-columns: 1.12fr 0.88fr;
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.reproductor-card,
+.playlist-lista-card {
+  border-radius: var(--radio-xl);
+  background: var(--bg-tarjeta);
+  border: 1px solid var(--borde-estelar);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--sombra-noche), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.reproductor-card {
+  padding: 2.25rem 2rem;
+}
+
+/* Disco celestial giratorio */
+.disco-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.35rem;
+  margin-bottom: 1.6rem;
+}
+
+.vinilo-disco {
+  width: 158px;
+  height: 158px;
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.14), transparent 45%),
+    radial-gradient(circle at center, #1b2550 0%, #090e22 65%, #040712 100%);
+  border: 1px solid rgba(243, 213, 155, 0.32);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.55),
+    0 0 42px rgba(243, 213, 155, 0.12);
+  animation: girarVinilo 16s linear infinite;
+  animation-play-state: paused;
+}
+
+.vinilo-disco.girando {
+  animation-play-state: running;
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.6),
+    0 0 54px rgba(243, 213, 155, 0.24);
+}
+
+.vinilo-surcos {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at center,
+    rgba(243, 213, 155, 0.08) 0px,
+    rgba(243, 213, 155, 0.08) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+}
+
+.vinilo-centro {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f7e1b5, #c69546);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 20px rgba(243, 213, 155, 0.35);
+  z-index: 2;
+}
+
+.vinilo-estrella {
+  color: #161d3a;
+  font-size: 1.2rem;
+}
+
+/* Ecualizador */
+.ecualizador {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 5px;
+  height: 30px;
+}
+
+.ecualizador span {
+  width: 4px;
+  height: 6px;
+  border-radius: 99px;
+  background: linear-gradient(to top, rgba(243, 213, 155, 0.45), var(--oro));
+  transition: height 0.14s ease;
+}
+
+/* Información de pista */
+.track-actual {
+  text-align: center;
+  margin-bottom: 1.4rem;
+}
+
+.track-etiqueta {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--oro);
+}
+
+.track-titulo {
+  margin: 0.35rem 0 0.25rem;
+  font-family: var(--fuente-titulo);
+  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.track-artista {
+  margin: 0;
+  color: var(--texto-tenue);
+  font-size: 0.9rem;
+}
+
+/* Progreso y controles */
+.progreso-bloque {
+  margin-bottom: 1.3rem;
+}
+
+.tiempos-fila {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  color: var(--texto-tenue);
+  margin-bottom: 0.4rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.slider-progreso,
+.slider-volumen {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider-progreso::-webkit-slider-thumb,
+.slider-volumen::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--oro);
+  box-shadow: 0 0 12px rgba(243, 213, 155, 0.7);
+  cursor: pointer;
+}
+
+.slider-progreso::-moz-range-thumb,
+.slider-volumen::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: var(--oro);
+  box-shadow: 0 0 12px rgba(243, 213, 155, 0.7);
+  cursor: pointer;
+}
+
+.controles-fila {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.btn-icono {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--borde-estelar);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--texto-luz);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-icono svg {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-icono:hover {
+  background: rgba(243, 213, 155, 0.14);
+  border-color: var(--borde-brillo);
+  transform: scale(1.05);
+}
+
+.btn-play-principal {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 241, 210, 0.65);
+  background: linear-gradient(135deg, #f5dba5, #cf9d4d);
+  color: #0b1126;
+  font-size: 1.3rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 0 32px rgba(243, 213, 155, 0.38);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-play-principal:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 42px rgba(243, 213, 155, 0.55);
+}
+
+.volumen-fila {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: 240px;
+  margin: 0 auto 1.65rem;
+  color: var(--texto-tenue);
+  font-size: 0.8rem;
+}
+
+.volumen-icono {
+  color: var(--oro);
+}
+
+.volumen-texto {
+  min-width: 34px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Nota dedicada por canción */
+.dedicatoria-caja {
+  padding: 1.25rem 1.35rem;
+  border-radius: var(--radio-md);
+  background: rgba(7, 11, 27, 0.55);
+  border: 1px solid rgba(243, 213, 155, 0.16);
+  transition: opacity 0.25s ease;
+}
+
+.dedicatoria-label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rosa-luna);
+  margin-bottom: 0.45rem;
+}
+
+.dedicatoria-texto {
+  margin: 0;
+  font-family: var(--fuente-titulo);
+  font-size: 1.22rem;
+  font-style: italic;
+  line-height: 1.48;
+  color: var(--texto-luz);
+}
+
+.track-enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.btn-plataforma {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--borde-estelar);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--oro);
+  font-size: 0.78rem;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-plataforma:hover {
+  background: rgba(243, 213, 155, 0.14);
+  border-color: var(--borde-brillo);
+}
+
+/* Lista lateral de canciones */
+.playlist-lista-card {
+  padding: 1.65rem 1.35rem;
+}
+
+.playlist-lista-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 0.4rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 0.8rem;
+}
+
+.playlist-lista-header h3 {
+  margin: 0;
+  font-family: var(--fuente-titulo);
+  font-size: 1.55rem;
+  font-weight: 500;
+}
+
+.playlist-conteo {
+  font-size: 0.78rem;
+  color: var(--texto-tenue);
+}
+
+.playlist-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.playlist-item-btn {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 0.9rem;
+  border-radius: var(--radio-md);
+  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--texto-luz);
+  text-align: left;
+  font-family: var(--fuente-cuerpo);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.playlist-item-btn:hover {
+  background: rgba(243, 213, 155, 0.07);
+  transform: translateX(3px);
+}
+
+.playlist-item-btn.activa {
+  background: linear-gradient(135deg, rgba(243, 213, 155, 0.14), rgba(125, 142, 232, 0.12));
+  border-color: rgba(243, 213, 155, 0.35);
+}
+
+.playlist-item-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  color: var(--oro);
+  background: rgba(243, 213, 155, 0.1);
+}
+
+.playlist-item-btn.activa .playlist-item-num {
+  background: var(--oro);
+  color: #090f24;
+  font-weight: 600;
+}
+
+.playlist-item-titulo {
+  display: block;
+  font-size: 0.94rem;
+  font-weight: 500;
+  color: var(--texto-luz);
+}
+
+.playlist-item-artista {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--texto-tenue);
+  margin-top: 0.1rem;
+}
+
+.playlist-item-duracion {
+  font-size: 0.76rem;
+  color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums;
+}
+
+/* =====================================================================
+   4. Constelación interactiva
+   ===================================================================== */
+.seccion-constelacion {
+  padding: 5rem 0;
+}
+
+.constelacion-caja {
+  border-radius: var(--radio-xl);
+  padding: 2rem;
+  background: var(--bg-tarjeta);
+  border: 1px solid var(--borde-estelar);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--sombra-noche);
+}
+
+.constelacion-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.constelacion-contador {
+  font-size: 0.84rem;
+  color: var(--oro);
+  letter-spacing: 0.04em;
+}
+
+.constelacion-mapa-wrap {
+  border-radius: var(--radio-lg);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(30, 44, 96, 0.55), rgba(6, 10, 26, 0.88));
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.constelacion-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.constelacion-linea {
+  stroke: rgba(243, 213, 155, 0.14);
+  stroke-width: 1.4;
+  stroke-dasharray: 4 5;
+  transition: stroke 0.5s ease, stroke-width 0.5s ease;
+}
+
+.constelacion-linea.encendida {
+  stroke: rgba(243, 213, 155, 0.72);
+  stroke-width: 2;
+  stroke-dasharray: none;
+  filter: drop-shadow(0 0 6px rgba(243, 213, 155, 0.65));
+}
+
+.estrella-nodo {
+  cursor: pointer;
+  outline: none;
+}
+
+.estrella-halo {
+  fill: rgba(243, 213, 155, 0.14);
+  transition: r 0.35s ease, fill 0.35s ease;
+}
+
+.estrella-nucleo {
+  fill: #dbe2ff;
+  transition: fill 0.3s ease, transform 0.3s ease;
+}
+
+.estrella-etiqueta-svg {
+  fill: rgba(199, 205, 227, 0.65);
+  font-family: var(--fuente-cuerpo);
+  font-size: 12px;
+  text-anchor: middle;
+  pointer-events: none;
+  transition: fill 0.3s ease;
+}
+
+.estrella-nodo:hover .estrella-halo,
+.estrella-nodo:focus-visible .estrella-halo {
+  fill: rgba(243, 213, 155, 0.32);
+}
+
+.estrella-nodo.encendida .estrella-halo {
+  fill: rgba(243, 213, 155, 0.28);
+}
+
+.estrella-nodo.encendida .estrella-nucleo {
+  fill: var(--oro);
+  filter: drop-shadow(0 0 8px rgba(243, 213, 155, 0.95));
+}
+
+.estrella-nodo.seleccionada .estrella-halo {
+  fill: rgba(232, 180, 196, 0.36);
+}
+
+.estrella-nodo.encendida .estrella-etiqueta-svg {
+  fill: var(--oro);
+}
+
+.estrella-mensaje-card {
+  text-align: center;
+  padding: 1.6rem 1.4rem;
+  border-radius: var(--radio-md);
+  background: rgba(7, 11, 27, 0.6);
+  border: 1px solid rgba(243, 213, 155, 0.18);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.estrella-nombre {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--oro);
+  margin-bottom: 0.55rem;
+}
+
+.estrella-texto {
+  margin: 0 auto;
+  max-width: 620px;
+  font-family: var(--fuente-titulo);
+  font-size: clamp(1.35rem, 2.8vw, 1.75rem);
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--texto-luz);
+}
+
+.constelacion-completa {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  color: var(--oro);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+/* =====================================================================
+   5. Nota final bajo la luna
+   ===================================================================== */
+.seccion-nota {
+  padding: 5rem 0 4rem;
+}
+
+.nota-card {
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
+  padding: 3.2rem 2.4rem;
+  border-radius: var(--radio-xl);
+  background: linear-gradient(180deg, var(--bg-tarjeta-fuerte), rgba(8, 12, 28, 0.85));
+  border: 1px solid var(--borde-estelar);
+  backdrop-filter: blur(16px);
+  box-shadow: var(--sombra-noche);
+}
+
+.nota-parrafos {
+  margin: 2rem auto 2.2rem;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.nota-parrafos p {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 1.03rem;
+  font-weight: 300;
+}
+
+.nota-firma {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  margin-bottom: 2.4rem;
+}
+
+.nota-despedida {
+  font-size: 0.88rem;
+  color: var(--texto-tenue);
+}
+
+.nota-autor {
+  font-family: var(--fuente-firma);
+  font-size: 2.15rem;
+  color: var(--oro);
+}
+
+.fugaz-bloque {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.fugaz-mensaje {
+  margin: 0;
+  min-height: 1.5rem;
+  font-family: var(--fuente-titulo);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--rosa-luna);
+  transition: opacity 0.35s ease;
+}
+
+/* Pie de página */
+.footer {
+  padding: 2rem 0 3.5rem;
+  text-align: center;
+  color: var(--texto-tenue);
+  font-size: 0.84rem;
+}
+
+.footer span {
+  color: var(--oro);
+}
+
+/* =====================================================================
+   Animaciones
+   ===================================================================== */
+@keyframes flotarSuave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes girarVinilo {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulsoLinea {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scaleY(0.92);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes ondaMini {
+  0% {
+    height: 4px;
+  }
+  100% {
+    height: 14px;
+  }
+}
+
+/* =====================================================================
+   Diseño adaptable para celulares y tablets
+   ===================================================================== */
+@media (max-width: 860px) {
+  .reproductor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .reproductor-card {
+    padding: 1.85rem 1.35rem;
+  }
+
+  .constelacion-caja,
+  .nota-card {
+    padding: 1.8rem 1.25rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .mini-player {
+    top: auto;
+    bottom: 0.9rem;
+    right: 50%;
+    transform: translateX(50%);
+    width: calc(100% - 1.5rem);
+    max-width: 390px;
+    justify-content: space-between;
+  }
+
+  .mini-info {
+    flex: 1;
+  }
+
+  .footer {
+    padding-bottom: 5.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .entrada-card,
+  .vinilo-disco,
+  .scroll-linea,
+  .mini-player.reproduciendo .mini-onditas span {
+    animation: none;
+  }
+}

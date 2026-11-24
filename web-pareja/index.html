@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Una sorpresa para ti</title>
+  <meta name="description" content="Una página especial hecha con amor." />
+
+  <!-- Tipografías cálidas y románticas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Dancing+Script:wght@500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Lienzo de partículas suaves y destellos de celebración -->
+  <canvas id="ambiente-canvas" aria-hidden="true"></canvas>
+
+  <!-- Pantalla de bienvenida / Sobre sorpresa -->
+  <div id="pantalla-inicio" class="intro-overlay" role="dialog" aria-modal="true" aria-labelledby="intro-titulo">
+    <div class="intro-card">
+      <div class="ornamento-svg" aria-hidden="true">
+        <svg viewBox="0 0 64 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 12H22" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.55" />
+          <path d="M42 12H62" stroke="currentColor" stroke-width="1" stroke-linecap="round" opacity="0.55" />
+          <path d="M32 4.5C30.4 2.3 26.8 2.6 25.7 5.2C24.7 7.6 26.3 10.6 32 15.5C37.7 10.6 39.3 7.6 38.3 5.2C37.2 2.6 33.6 2.3 32 4.5Z" fill="currentColor" />
+        </svg>
+      </div>
+
+      <p id="intro-sobretitulo" class="eyebrow">Tengo algo preparado para ti</p>
+      <h1 id="intro-titulo" class="intro-title">Una pequeña sorpresa</h1>
+      <p id="intro-subtitulo" class="intro-subtitle">
+        Hecha a mano, línea por línea, pensando en tu sonrisa.
+      </p>
+
+      <button id="btn-abrir-sorpresa" class="btn-sello" type="button">
+        <span class="btn-sello-icono" aria-hidden="true">✦</span>
+        <span id="intro-btn-texto">Abrir sorpresa</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenido principal -->
+  <main id="contenido-principal" class="main-content" aria-hidden="true">
+    <!-- 1. Portada -->
+    <header class="hero seccion-revelar">
+      <div class="container hero-inner">
+        <span id="etiqueta-fecha" class="badge-fecha">Un día hecho para celebrarte</span>
+        <h1 class="hero-title">
+          <span id="portada-titulo">Feliz cumpleaños,</span>
+          <em id="portada-nombre" class="nombre-destacado">mi amor</em>
+        </h1>
+        <p id="portada-subtitulo" class="hero-subtitle">
+          Hoy celebro tu vida, tu luz y la suerte inmensa de caminar contigo.
+        </p>
+
+        <div class="scroll-cue" aria-hidden="true">
+          <span>Desliza despacio</span>
+          <div class="scroll-line"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. Dedicatoria estilo papel fino -->
+    <section class="seccion-carta seccion-revelar" aria-labelledby="carta-titulo">
+      <div class="container">
+        <article class="papel-carta">
+          <div class="esquina esquina-tl" aria-hidden="true"></div>
+          <div class="esquina esquina-br" aria-hidden="true"></div>
+
+          <p class="eyebrow">Dedicatoria</p>
+          <h2 id="carta-titulo" class="section-title">Para ti, en tu día</h2>
+
+          <div id="carta-cuerpo" class="carta-cuerpo"></div>
+
+          <div class="carta-firma">
+            <span id="carta-despedida" class="firma-despedida">Con todo mi cariño,</span>
+            <span id="carta-autor" class="firma-nombre">Tu persona favorita</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3. Sección interactiva: Razones por las que te amo -->
+    <section class="seccion-razones seccion-revelar" aria-labelledby="razones-titulo">
+      <div class="container">
+        <div class="section-header">
+          <p class="eyebrow">Pequeñas verdades</p>
+          <h2 id="razones-titulo" class="section-title">Razones por las que te amo</h2>
+          <p class="section-lead">
+            Cada clic guarda un motivo real por el que haces mi vida más bonita.
+          </p>
+        </div>
+
+        <div class="razon-escenario">
+          <div class="razon-tarjeta" id="razon-tarjeta" aria-live="polite">
+            <div class="razon-meta">
+              <span id="razon-contador" class="razon-numero">Razón 01 de 12</span>
+              <span id="razon-descubiertas" class="razon-progreso-texto">1 descubierta</span>
+            </div>
+
+            <div class="razon-texto-wrap">
+              <span class="comilla-decorativa" aria-hidden="true">“</span>
+              <p id="razon-texto" class="razon-texto"></p>
+            </div>
+
+            <div class="barra-progreso" aria-hidden="true">
+              <div id="barra-progreso-fill" class="barra-progreso-fill"></div>
+            </div>
+          </div>
+
+          <div class="razones-controles">
+            <button id="btn-razon-anterior" class="btn-secundario" type="button" aria-label="Razón anterior">
+              ← Anterior
+            </button>
+
+            <button id="btn-nueva-razon" class="btn-primario" type="button">
+              <span class="corazon-btn" aria-hidden="true">♥</span>
+              <span>Descubre otra razón</span>
+            </button>
+
+            <button id="btn-ver-todas" class="btn-secundario" type="button" aria-expanded="false">
+              Ver todas
+            </button>
+          </div>
+
+          <p id="razon-mensaje-completo" class="mensaje-completo" hidden>
+            ✦ Has descubierto todas las razones… aunque cada día encuentro muchas más. ✦
+          </p>
+        </div>
+
+        <!-- Lista desplegable con todas las razones -->
+        <div id="lista-todas-razones" class="todas-razones-grid" hidden></div>
+      </div>
+    </section>
+
+    <!-- 4. Sorpresa final: Velita interactiva de cumpleaños -->
+    <section class="seccion-deseo seccion-revelar" aria-labelledby="deseo-titulo">
+      <div class="container">
+        <div class="deseo-caja">
+          <p class="eyebrow">Un último detalle</p>
+          <h2 id="deseo-titulo" class="section-title">Pide un deseo</h2>
+          <p id="deseo-instruccion" class="section-lead">
+            Toca la llama para soplar tu velita de cumpleaños y descubrir tu regalo.
+          </p>
+
+          <!-- Velita interactiva -->
+          <button
+            id="btn-soplar-vela"
+            class="vela-escena"
+            type="button"
+            aria-label="Soplar la vela de cumpleaños"
+          >
+            <span class="vela-aura" aria-hidden="true"></span>
+            <span class="vela-humo" aria-hidden="true"></span>
+            <span class="vela-llama" aria-hidden="true"></span>
+            <span class="vela-pabilo" aria-hidden="true"></span>
+            <span class="vela-cuerpo" aria-hidden="true"></span>
+            <span class="vela-plato" aria-hidden="true"></span>
+            <span class="vela-hint" id="vela-hint">Toca para soplar</span>
+          </button>
+
+          <!-- Vale / regalo que aparece al soplar la vela -->
+          <div id="vale-regalo" class="vale-regalo" hidden>
+            <p id="vale-subtitulo" class="vale-etiqueta">Este vale es tuyo para cuando tú elijas:</p>
+            <h3 id="vale-titulo" class="vale-titulo">Vale por una cita inolvidable</h3>
+            <p id="vale-detalle" class="vale-detalle">
+              Tu comida favorita, tu plan elegido y todo mi tiempo solo para ti.
+            </p>
+            <div class="vale-sello" aria-hidden="true">★ Válido siempre ★</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <p>
+          Hecho con <span class="corazon-latido" aria-label="amor">♥</span> por
+          <span id="footer-autor">Tu persona favorita</span>
+        </p>
+      </div>
+    </footer>
+  </main>
+
+  <script src="datos.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

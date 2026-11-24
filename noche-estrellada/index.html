@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Una noche estrellada para ti</title>
+  <meta name="description" content="Un detalle romántico bajo las estrellas, con música dedicada." />
+
+  <!-- Tipografías elegantes para la noche estrellada -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,600&family=Dancing+Script:wght@500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Cielo nocturno interactivo (estrellas, brillo lunar y estrellas fugaces) -->
+  <canvas id="cielo-canvas" aria-hidden="true"></canvas>
+  <div class="aurora-capa" aria-hidden="true"></div>
+
+  <!-- 1. Pantalla de entrada (también activa el audio suavemente al hacer clic) -->
+  <div id="pantalla-entrada" class="entrada-overlay" role="dialog" aria-modal="true" aria-labelledby="entrada-titulo">
+    <div class="entrada-card">
+      <div class="luna-emblema" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M39.5 11.2C32.2 13.4 26.8 20.1 26.8 28.2C26.8 38 34.7 45.9 44.5 45.9C47.7 45.9 50.6 45.1 53.2 43.6C49.7 50.4 42.6 55 34.5 55C22.9 55 13.5 45.6 13.5 34C13.5 22.8 22.2 13.7 33.2 13C35.4 12.9 37.5 12.2 39.5 11.2Z"
+            fill="currentColor"
+            opacity="0.92"
+          />
+          <path d="M49 14L50.3 17.7L54 19L50.3 20.3L49 24L47.7 20.3L44 19L47.7 17.7L49 14Z" fill="currentColor" />
+          <circle cx="42" cy="28" r="1.5" fill="currentColor" opacity="0.7" />
+        </svg>
+      </div>
+
+      <p id="entrada-etiqueta" class="eyebrow">Sin motivo especial, solo porque sí</p>
+      <h1 id="entrada-titulo" class="entrada-titulo">Guardé una noche estrellada para ti</h1>
+      <p id="entrada-subtitulo" class="entrada-subtitulo">
+        Ponte audífonos si puedes, sube un poquito el volumen y entra despacio.
+      </p>
+
+      <button id="btn-entrar" class="btn-estelar" type="button">
+        <span class="btn-destello" aria-hidden="true">✦</span>
+        <span id="entrada-boton-texto">Entrar a nuestra noche</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra flotante discreta para controlar la música desde cualquier sección -->
+  <nav id="mini-player" class="mini-player" aria-label="Control rápido de música" hidden>
+    <button id="mini-btn-play" class="mini-play-btn" type="button" aria-label="Reproducir o pausar música">
+      <span id="mini-play-icon" aria-hidden="true">❚❚</span>
+    </button>
+    <div class="mini-info">
+      <span class="mini-estado">Sonando ahora</span>
+      <span id="mini-titulo" class="mini-titulo">Claro de Luna</span>
+    </div>
+    <div id="mini-onditas" class="mini-onditas" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <a href="#playlist" class="mini-link">Playlist</a>
+  </nav>
+
+  <!-- Contenido principal -->
+  <main id="contenido-principal" class="contenido-principal" aria-hidden="true">
+    <!-- 2. Portada celestial -->
+    <header class="hero seccion-revelar">
+      <div class="container hero-inner">
+        <div class="luna-halo" aria-hidden="true"></div>
+        <span id="portada-etiqueta" class="etiqueta-noche">Para ti, hoy y cualquier noche</span>
+
+        <h1 class="hero-titulo">
+          <span id="portada-titulo">Bajo este cielo,</span>
+          <em id="portada-destacado" class="titulo-dorado">siempre te elijo a ti</em>
+        </h1>
+
+        <p class="hero-saludo">
+          Para <span id="hero-nombre-pareja">mi amor</span>
+        </p>
+
+        <p id="portada-subtitulo" class="hero-subtitulo">
+          No hacía falta ninguna fecha en el calendario para recordarte lo bonita que haces mi vida.
+        </p>
+
+        <div class="hero-acciones">
+          <a href="#playlist" class="btn-estelar btn-estelar--suave">
+            <span aria-hidden="true">♪</span>
+            <span>Escuchar nuestra playlist</span>
+          </a>
+        </div>
+
+        <div class="scroll-indicador" aria-hidden="true">
+          <span>Toca el cielo o desliza</span>
+          <div class="scroll-linea"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 3. Reproductor y Playlist dedicada -->
+    <section id="playlist" class="seccion-playlist seccion-revelar" aria-labelledby="playlist-titulo">
+      <div class="container">
+        <div class="seccion-cabecera">
+          <p class="eyebrow">Nuestra banda sonora</p>
+          <h2 id="playlist-titulo" class="seccion-titulo">Canciones que suenan a ti</h2>
+          <p class="seccion-lead">
+            Cada melodía guarda una pequeña nota de lo que siento cuando pienso en ti.
+          </p>
+        </div>
+
+        <div class="reproductor-grid">
+          <!-- Tarjeta principal del reproductor -->
+          <article class="reproductor-card">
+            <div class="disco-wrap">
+              <div id="vinilo-disco" class="vinilo-disco" aria-hidden="true">
+                <div class="vinilo-surcos"></div>
+                <div class="vinilo-centro">
+                  <span class="vinilo-estrella">✦</span>
+                </div>
+              </div>
+
+              <!-- Visualizador suave de audio -->
+              <div id="ecualizador" class="ecualizador" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span>
+              </div>
+            </div>
+
+            <div class="track-actual">
+              <span id="track-numero" class="track-etiqueta">Pista 01 de 04</span>
+              <h3 id="track-titulo" class="track-titulo">Claro de Luna</h3>
+              <p id="track-artista" class="track-artista">Melodía nocturna</p>
+            </div>
+
+            <!-- Barra de progreso -->
+            <div class="progreso-bloque">
+              <div class="tiempos-fila">
+                <span id="tiempo-actual">0:00</span>
+                <span id="tiempo-total">2:10</span>
+              </div>
+              <input
+                id="barra-progreso"
+                class="slider-progreso"
+                type="range"
+                min="0"
+                max="100"
+                value="0"
+                aria-label="Progreso de la canción"
+              />
+            </div>
+
+            <!-- Controles -->
+            <div class="controles-fila">
+              <button id="btn-anterior" class="btn-icono" type="button" aria-label="Canción anterior">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M6 6h2v12H6V6zm3.5 6l8.5 6V6l-8.5 6z" />
+                </svg>
+              </button>
+
+              <button id="btn-play-pausa" class="btn-play-principal" type="button" aria-label="Reproducir o pausar">
+                <span id="icono-play" aria-hidden="true">▶</span>
+              </button>
+
+              <button id="btn-siguiente" class="btn-icono" type="button" aria-label="Siguiente canción">
+                <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Volumen y enlaces externos opcionales -->
+            <div class="volumen-fila">
+              <span class="volumen-icono" aria-hidden="true">♪</span>
+              <input
+                id="control-volumen"
+                class="slider-volumen"
+                type="range"
+                min="0"
+                max="100"
+                value="65"
+                aria-label="Volumen"
+              />
+              <span id="volumen-valor" class="volumen-texto">65%</span>
+            </div>
+
+            <!-- Dedicatoria de la canción actual -->
+            <div class="dedicatoria-caja">
+              <span class="dedicatoria-label">Por qué esta canción es tuya</span>
+              <p id="track-dedicatoria" class="dedicatoria-texto"></p>
+              <div id="track-enlaces" class="track-enlaces" hidden></div>
+            </div>
+          </article>
+
+          <!-- Lista de canciones -->
+          <aside class="playlist-lista-card" aria-label="Lista de canciones dedicadas">
+            <div class="playlist-lista-header">
+              <h3>Lista dedicada</h3>
+              <span id="playlist-conteo" class="playlist-conteo">4 canciones</span>
+            </div>
+            <ul id="playlist-items" class="playlist-items"></ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Constelación interactiva -->
+    <section id="constelacion" class="seccion-constelacion seccion-revelar" aria-labelledby="constelacion-titulo">
+      <div class="container">
+        <div class="seccion-cabecera">
+          <p id="constelacion-etiqueta" class="eyebrow">Toca cada estrella</p>
+          <h2 id="constelacion-titulo" class="seccion-titulo">Siete cosas que pienso de ti</h2>
+          <p id="constelacion-subtitulo" class="seccion-lead">
+            Enciende las estrellas una por una para unir nuestra constelación.
+          </p>
+        </div>
+
+        <div class="constelacion-caja">
+          <div class="constelacion-meta">
+            <span id="constelacion-progreso" class="constelacion-contador">0 de 7 estrellas encendidas</span>
+            <button id="btn-encender-todas" class="btn-texto-sutil" type="button">
+              Encender todas
+            </button>
+          </div>
+
+          <div class="constelacion-mapa-wrap">
+            <svg
+              id="constelacion-svg"
+              class="constelacion-svg"
+              viewBox="0 0 800 380"
+              role="group"
+              aria-label="Mapa interactivo de constelación"
+            >
+              <g id="constelacion-lineas"></g>
+              <g id="constelacion-nodos"></g>
+            </svg>
+          </div>
+
+          <div id="estrella-mensaje-card" class="estrella-mensaje-card" aria-live="polite">
+            <span id="estrella-nombre" class="estrella-nombre">Cielo en espera</span>
+            <p id="estrella-texto" class="estrella-texto">
+              Toca cualquiera de las estrellas brillantes de arriba para descubrir su mensaje.
+            </p>
+          </div>
+
+          <p id="constelacion-completa" class="constelacion-completa" hidden></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Nota final bajo la luna -->
+    <section id="nota" class="seccion-nota seccion-revelar" aria-labelledby="nota-titulo">
+      <div class="container">
+        <article class="nota-card">
+          <p id="nota-etiqueta" class="eyebrow">Antes de cerrar la noche</p>
+          <h2 id="nota-titulo" class="seccion-titulo">Solo quería recordártelo</h2>
+
+          <div id="nota-parrafos" class="nota-parrafos"></div>
+
+          <div class="nota-firma">
+            <span id="nota-despedida" class="nota-despedida">Siempre tuyo/a,</span>
+            <span id="nota-autor" class="nota-autor">Tu persona favorita</span>
+          </div>
+
+          <div class="fugaz-bloque">
+            <button id="btn-estrella-fugaz" class="btn-estelar" type="button">
+              <span aria-hidden="true">☄</span>
+              <span id="btn-fugaz-texto">Lanzar una estrella fugaz</span>
+            </button>
+            <p id="fugaz-mensaje" class="fugaz-mensaje" aria-live="polite"></p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <p>
+          Hecho bajo las estrellas por <span id="footer-autor">Tu persona favorita</span> ✦
+        </p>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Scripts del proyecto -->
+  <script src="personalizar.js"></script>
+  <script src="audio.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
